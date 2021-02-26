@@ -9,9 +9,14 @@ def import_data():
     print()
 
 
-def print_hi():
-    print("Hi")  # Press Strg+F8 to toggle the breakpoint.
+def application():
+    titel = ""
+    f = open('Fragen&Antworten.txt', 'r')
+    content = f.read()
+    print(content)
+    f.close()
+    #while True:
+     #   print("Box 1 | Box 2 | Box 3 | Box 4 | Box 5")
 
 
-print_hi()
-import_data()
+application()
