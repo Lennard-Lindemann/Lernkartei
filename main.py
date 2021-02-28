@@ -26,18 +26,33 @@ box5 = []
 
 def import_data():
     questionlist = []
+    status_list = []
     titel = ""
     komma = ','
+
+    # Öffnen der Frage & Antworten des Progammes
     f = open('Fragen&Antworten.txt', 'r')
     content = f.read()
     # Getting the the titel
     titel = content.partition(komma)[0]
     f.close()
 
+    # Öffnen der Statusdatei der Fragen
+    f_status = open('status_frage&antworten.txt', 'r')
+    content_status = f_status.read()
+    f_status.close()
+
+    con_status = content_status.split(',')
     con = content.split(',')
-    list_length = (len(con) - 1) / 2  # List_length to get the question and answer
+    list_length = (len(con) - 1) / 2  # List_length to get the questions and answers
+
+    list_length_status = 0  # Dient zur Inisialisierung, damit sie auch im Fall einer leeren Datei vorhanden ist
+    # Die if-verzweigung checked ob die Liste die eingelsen wurde leer ist
+    if len(con_status) != 1:
+        list_length_status = (len(con_status) / 2)  # Listen Länge von der Status Liste
     i = 1
     j = 1
+    # Schleife für die Fragen und Anworten
     while i <= list_length:
         frage = Questions()
         while j <= 2:
@@ -45,13 +60,34 @@ def import_data():
                 frage.question = con[j].lstrip()
                 j += 1
             else:
-                frage.answer = con[j]
+                frage.answer = con[j].lstrip()
                 j += 1
-        frage.nr = 1
+        frage.nr = 1  # Inisialisiert die jede nr erstmal mit ein, damit falls neu Frage hinzu gekommen sind sie in einer Liste auftauchen
         j = 1
         questionlist.append(frage)
         i += 1
 
+    # Schleife für die Objekt des Status
+    while i <= list_length_status:
+        frage_status = Questions()
+        while j <= 2:
+            if j % 2 != 0:
+                frage_status.question = con_status[j].lstrip()
+                j += 1
+            else:
+                frage_status.nr = con_status[j].lstrip()
+                j += 1
+        status_list.append(frage_status)
+        i += 1
+
+    # Zuweisung der Nummern von der Status_list
+    print(list_length_status)
+    for k in range(list_length_status):
+        for l in range(list_length_status):
+            if status_list[j].question == questionlist[k]:
+                questionlist[k].nr = status_list[j].nr
+
+    # Liste für die Zuweisung zu den verschiedenen Boxen
     for i in range(len(questionlist)):
         if questionlist[i].nr == 1:
             box1.append(questionlist[i])
@@ -124,7 +160,6 @@ def ausgabe_frage(boxnr):
 
 
 def application():
-
     import_data()
     while True:
         print("Box (1) Fragen in der Box:", len(box1), "| Box (2)  Fragen in der Box:", len(box2)
